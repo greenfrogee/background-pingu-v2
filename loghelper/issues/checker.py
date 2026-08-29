@@ -2102,7 +2102,10 @@ class IssueChecker:
                 
                 if self.log.has_pattern(r"60 ?(percent|%) ?keyboard"):
                     builder.error("rebind_f3", self.cmd_prefix)
-                
+
+                if self.log.has_pattern(r"^/recommend_settings"):
+                    builder.error("slash_recommend_settings")
+
                 if self.log.has_content("19.0.1"):
                     builder.error("k4_setup_video_outdated")
 

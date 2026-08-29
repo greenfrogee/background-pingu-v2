@@ -36,7 +36,7 @@ class Core(Cog):
             # print(f"OCR: '{ocr_text}'")
             # print(f"OCR time: {end - start}s")
             # if ocr_text:
-            #     content = f"{content} {ocr_text}" if content else ocr_text
+            #     content = f"{content}\n{ocr_text}" if content else ocr_text
             logs.append(("message", parser.Log(content)))
 
         return logs
@@ -121,12 +121,6 @@ class Core(Cog):
 
     @Cog.listener()
     async def on_message(self, msg: discord.Message):
-        if msg.content.strip().lower().startswith("/recommend_settings"):
-            reply, found_result = await self.get_settings(msg)
-            if found_result:
-                return await msg.reply(content=reply)
-            return await msg.reply(content="❌ **No log found in this message.**")
-        
         result = await self.check_log(msg)
         if self.should_reply(result):
             try:
