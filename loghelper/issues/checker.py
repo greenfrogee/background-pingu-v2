@@ -1383,6 +1383,17 @@ class IssueChecker:
             builder.error("ranked_atum_crash")
             found_crash_cause = True
         
+        if (self.log.is_ranked_log
+            and self.log.has_content("Update Status: FAILED_AUTH")
+        ):
+            if (not self.log.major_java_version is None
+                and self.log.major_java_version < 17
+            ):
+                builder.error("ranked_failed_auth_java_8")
+            else:
+                builder.error("ranked_failed_auth")
+            found_crash_cause = True
+
         if self.log.has_mod("optifine"):
             for incompatible_mod in ["Starlight"]:
                 if self.log.has_mod(incompatible_mod):
