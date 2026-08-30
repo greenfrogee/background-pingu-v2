@@ -281,14 +281,15 @@ Tutorial: https://youtu.be/l-q-_4R8_6M?t=713 (timestamped)"""
         for server_id, support_cid, bot_cid in SERVER_SUPPORT_BOT_CHANNEL_IDS:
             if ctx.guild_id == server_id:
                 if not support_cid is None:
-                    if ctx.channel_id == support_cid: in_channel = " here"
+                    if ctx.channel_id == support_cid: in_channel = " in this channel"
                     else: in_channel = f" in <#{support_cid}>"
                 break
         
-        text = f"""To troubleshoot issues with Ninjabrain Bot, please send the following information{in_channel} so someone can review it:
-- Screenshots of these Ninjabrain Bot tabs in options: `Basic`, `Advanced`, Optional features ➔ `Angle adjustment` & `Boat measurement`
-- Drag and drop these files from your instance folder into Discord: `.minecraft/config/mcsr/standardsettings.json` and `.minecraft/options.txt` 
-Also, make sure that the resolution for Toolscreen ➔ Basic ➔ General ➔ EyeZoom (or Jingle ➔ Scripts ➔ Resizing ➔ Customize ➔ "Eye measuring size") is set to `384x16384` , and make sure you're switching to 30 FOV.
+        text = f"""* Make sure that the resolution for Toolscreen ➔ Basic ➔ General ➔ EyeZoom is set to `384x16384` , and make sure you're switching to 30 FOV when measuring.
+* Make sure you are measuring in accordance to [this image](<https://iili.io/Cpir6n2.jpg>).
+* If you are doing the above correctly then please send **__all__** of the following information{in_channel} so someone can review it:
+  * Screenshots of these Ninjabrain Bot tabs in options: `Basic`, `Advanced`, Optional features ➔ `Angle adjustment` & `Boat measurement`
+  * Drag and drop these files from your instance folder into Discord: `minecraft/config/mcsr/standardsettings.json` and `minecraft/options.txt` 
 -# You don't need to retype this command, it just sends this text."""
         return await self._respond(ctx, text, mention)
 
@@ -721,6 +722,13 @@ Practice mods:
         text = "https://www.youtube.com/watch?v=uBqAeZMlEFQ"
         return await self._respond(ctx, text, mention)
 
+    @commands.slash_command(name="elaborate", description="Tells someone to describe their issue in more detail.")
+    async def elaborate(self, ctx: discord.ApplicationContext, mention: discord.Option(discord.Member, "User to ping with the response", required=False, default=None)):
+        text = """Please describe your issue in as much detail as possible.
+Screenshots are always a great way to describe what you did or what the issue is, try not to crop them if possible to not leave out important context.
+If your issue is with Minecraft, make sure to send a log by following [this image](<https://iili.io/CyBnHml.png>)."""
+        return await self._respond(ctx, text, mention)
+
     @commands.slash_command(name="eyezoom", description="Gives a link to a tutorial for Eye Zoom Macro.")
     async def eyezoom(self, ctx: discord.ApplicationContext, mention: discord.Option(discord.Member, "User to ping with the response", required=False, default=None)):
         text = """Download Toolscreen: <https://github.com/jojoe77777/Toolscreen/releases/latest>
@@ -794,6 +802,27 @@ Blaze practice map: <https://github.com/Mescht/Blaze-Practice/releases/latest>""
 This mod requires Atum, which should be obtained from <https://mc.sr/mods/>.
 
 Join the FSG discord for the latest resources : https://discord.gg/cADcJe8ND8"""
+        return await self._respond(ctx, text, mention)
+
+    @commands.slash_command(name="coop", description="Gives different ways to set up coop speedrunning.")
+    async def coop(
+        self,
+        ctx: discord.ApplicationContext,
+        type: discord.Option(str, choices=["bore", "e4mcbiat", "ngrok"], required=True),
+        mention: discord.Option(discord.Member, "User to ping with the response", required=False, default=None),
+    ):
+        if type == "bore":
+            text = """Download: <https://github.com/ekzhang/bore/releases/latest>
+Tutorial: <https://www.youtube.com/watch?v=8NYvWOt42kg>
+⚠️ Bore is often flagged as malware - that's a false positive."""
+        elif type == "e4mcbiat":
+            text = """e4mcbiat is a java program for co-op that allows anyone to join open-to-lan worlds with a temporary address: https://discord.com/channels/83066801105145856/405839885509984256/1344741097964044299
+⚠️ It needs to be ran with Java 11+ for it to work."""
+        else: # ngrok
+            text = """Tutorial: <https://youtu.be/lGlnVMDIZNo>
+⚠️ For some people, ngrok seems to require credit card details."""
+
+        text = f"{text}\nFor alternatives, re-run this command with different options."
         return await self._respond(ctx, text, mention)
     
     @commands.slash_command(name="crafting", description="Gives links to search crafting resources.")
