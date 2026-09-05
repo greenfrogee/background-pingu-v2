@@ -2096,6 +2096,23 @@ class IssueChecker:
                             builder.error("gamma_draftout")
                         else:
                             builder.error("gamma")
+
+                    boateye_indicators = {
+                        "boateye": 5,
+                        r"100 ?(%|percent)": 5,
+                        "working": 5,
+                        r"ninja ?brain ?bot": 5,
+                        "not": 3,
+                        "working": 2,
+                    }
+                    boateye_total = 0
+                    for pattern, value in boateye_indicators.items():
+                        if self.log.has_pattern(pattern):
+                            boateye_total += value
+
+                    if asking_for_help_total >= 2 and boateye_total >= 10:
+                        builder.error("boateye_help")
+
                 
                 if (not self.log.type in [LogType.FULL_LOG, LogType.LAUNCHER_LOG, LogType.THREAD_DUMP, LogType.TOOLSCREEN_LOG]
                     and self.log.has_pattern(r"Process (crashed|exited) with (exit)? ?code (-?\d+)")
